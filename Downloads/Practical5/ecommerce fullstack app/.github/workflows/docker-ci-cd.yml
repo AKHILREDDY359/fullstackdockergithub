@@ -1,4 +1,4 @@
-name: Docker CI/CD - Ecommerce App
+name: Docker CI/CD
 
 on:
   push:
@@ -14,16 +14,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        submodules: 'recursive'
-        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0  # Fetch all history for all branches and tags
 
     - name: Debug - List directory contents
       run: |
+        echo "Current directory:"
+        pwd
+        echo "\nRoot directory contents:"
         ls -la
-        echo "Frontend directory contents:"
+        echo "\nFrontend directory contents:"
         ls -la docker-ecommerce-frontend/ || echo "Frontend directory not found"
-        echo "Backend directory contents:"
+        echo "\nBackend directory contents:"
         ls -la docker-ecommerce-backend/ || echo "Backend directory not found"
+        echo "\nGit status:"
+        git status
+        echo "\nGit submodule status:"
+        git submodule status || echo "No submodules found"
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
