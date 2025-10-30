@@ -13,6 +13,19 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch all history for all branches and tags
+
+    - name: Debug - List directory contents
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "\nRoot directory contents:"
+        ls -la
+        echo "\nFrontend directory contents:"
+        ls -la docker-ecommerce-frontend/ || echo "Frontend directory not found"
+        echo "\nBackend directory contents:"
+        ls -la docker-ecommerce-backend/ || echo "Backend directory not found"
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -26,15 +39,15 @@ jobs:
     - name: Build and push frontend
       uses: docker/build-push-action@v4
       with:
-        context: .
-        file: ./docker-ecommerce-frontend/Dockerfile
+        context: ./docker-ecommerce-frontend
+        file: Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-frontend:latest
 
     - name: Build and push backend
       uses: docker/build-push-action@v4
       with:
-        context: .
-        file: ./docker-ecommerce-backend/Dockerfile
+        context: ./docker-ecommerce-backend
+        file: Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-backend:latest
