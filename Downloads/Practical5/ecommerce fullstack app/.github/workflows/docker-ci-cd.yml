@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout repository with submodules
+    - name: Checkout repository
       uses: actions/checkout@v3
       with:
         submodules: 'recursive'
@@ -20,6 +20,9 @@ jobs:
     - name: Initialize and update submodules
       run: |
         git submodule update --init --recursive
+        ls -la
+        ls -la docker-ecommerce-frontend/  # Debug: List frontend directory
+        ls -la docker-ecommerce-backend/   # Debug: List backend directory
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
