@@ -14,7 +14,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Fetch all history for all branches and tags
+        fetch-depth: 0
 
     - name: Debug - List directory contents
       run: |
@@ -39,15 +39,15 @@ jobs:
     - name: Build and push frontend
       uses: docker/build-push-action@v4
       with:
-        context: ./docker-ecommerce-frontend
-        file: Dockerfile
+        context: .
+        file: docker-ecommerce-frontend/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-frontend:latest
 
     - name: Build and push backend
       uses: docker/build-push-action@v4
       with:
-        context: ./docker-ecommerce-backend
-        file: Dockerfile
+        context: .
+        file: docker-ecommerce-backend/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-backend:latest
